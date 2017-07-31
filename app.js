@@ -90,11 +90,10 @@ router.addRoute('/register', function (req, res) {
     }
 });
 
-router.addRoute('/edit/:id?', function (req, res) {
+router.addRoute('/edit/:id', function (req, res) {
     connection.query('SELECT * FROM MAHASISWA WHERE ? ', {
         id: this.params.id,
     }, function (err, rows, field) {
-        if (err) throw err;
         if (rows.length) {
             var data = rows[0];
             if (req.method.toUpperCase() == 'POST') {
@@ -102,27 +101,26 @@ router.addRoute('/edit/:id?', function (req, res) {
                 req.on('data', function (chuncks) {
                     data_post += chuncks;
                 });
+
                 req.on('end', function () {
                     data_post = qString.parse(data_post);
-                    res.end();
                     connection.query('UPDATE MAHASISWA SET ? WHERE ?', [{
-                            nama: data_post.nama,
-                        }, {
-                            id: data_post.id,
-                        }], function (err, field) {
+                        nama: data_post.nama,
+                    }, {
+                        id: data_post.id,
+                    }], function (err, field) {
                         if (err) throw err;
                         res.writeHead(302, { 'Location': '/home' });
                         res.end();
                     });
                 });
-
             } else {
                 var html = view.compileFile('./view/edit.html')({
                     person: data,
                 });
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(html);
             }
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.end(html);
         } else {
             var html = view.compileFile('./view/404.html');
             res.writeHead(404, { 'Content-type': 'text/html' });
@@ -130,6 +128,15 @@ router.addRoute('/edit/:id?', function (req, res) {
         }
     });
 
+});
+
+router.addRoute('/delete/:id', function (req, res) {
+    connection.query('DELETE FROM MAHASISWA WHERE ?', {
+        id: this.params.id,
+    }, function (err, field) {
+        res.writeHead(302, {'Location' : '/home'});
+        res.end();
+    });
 });
 
 http.createServer(function (req, res) {
