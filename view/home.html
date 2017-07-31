@@ -1,0 +1,27 @@
+{% extends 'layout.html'%}
+
+{% block title%}
+    Home
+{%endblock%}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <table>
+        <thead>
+            <th>Nim</th>
+            <th>Nama</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+            {% for person in people %}
+            <tr>
+                <td>{{person.nim}}</td>
+                <td>{{person.nama}}</td>
+                <td>{{person.nama}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/register">Add Data</a>
+{% endblock %}
