@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+<body>
+    <h1>Edit Data</h1>
+    <form method="POST">
+        <input type="hidden" name="id" value="{{person.id}}">
+        <input type="text" name="nim" value="{{person.nim}}" placeholder="Nim" disabled>
+        <br>
+        <br>
+        <input type="text" name="nama" value="{{person.nama}}" placeholder="Nama">
+        <input type="submit" name="" value="Submit">
+    </form>
+</body>
+
+</html>
+{% endblock %}
